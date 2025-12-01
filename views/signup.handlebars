@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <title>ThoughtLog – Sign up</title>
+  <link rel="stylesheet" type="text/css" href="/assets/style.css"/>
+</head>
+<body>
+  <nav>
+    <div class="nav-title">ThoughtLog</div>
+    <div class="navlink"><a href="/login">Login</a></div>
+    <div class="navlink"><a href="/signup">Sign up</a></div>
+  </nav>
+
+  <section id="signup">
+    <form id="signupForm" name="signupForm" action="/signup" method="POST" class="mainForm">
+      <label for="user">Username: </label>
+      <input id="user" type="text" name="username" placeholder="username"/>
+      <label for="pass">Password: </label>
+      <input id="pass" type="password" name="pass" placeholder="password"/>
+      <label for="pass2">Retype Password: </label>
+      <input id="pass2" type="password" name="pass2" placeholder="retype password"/>
+      <input class="formSubmit" type="submit" value="Sign Up" />
+    </form>
+  </section>
+
+  <script src="/assets/bundle.js"></script>
+</body>
+</html>

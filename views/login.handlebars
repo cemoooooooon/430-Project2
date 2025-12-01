@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <title>ThoughtLog – Login</title>
+  <link rel="stylesheet" type="text/css" href="/assets/style.css"/>
+</head>
+<body> 
+  <nav>
+    <div class="nav-title">ThoughtLog</div>
+    <div class="navlink"><a href="/login">Login</a></div>
+    <div class="navlink"><a href="/signup">Sign up</a></div>
+  </nav>
+
+  <section id="login">
+    <form id="loginForm" name="loginForm" action="/login" method="POST" class="mainForm">
+      <label for="user">Username: </label>
+      <input id="user" type="text" name="username" placeholder="username"/>
+      <label for="pass">Password: </label>
+      <input id="pass" type="password" name="pass" placeholder="password"/>
+      <input class="formSubmit" type="submit" value="Sign In" />
+    </form>
+  </section>
+
+   <div id="domoMessage" class="hidden">
+    <h3><span id="errorMessage"></span></h3>
+  </div>
+
+  <script src="/assets/bundle.js"></script>
+</body>
+</html>

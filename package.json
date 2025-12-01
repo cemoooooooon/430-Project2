@@ -31,11 +31,17 @@
     "helmet": "^8.1.0",
     "mongodb": "^7.0.0",
     "mongoose": "^8.19.3",
+    "react": "^19.2.0",
+    "react-dom": "^19.2.0",
     "redis": "^5.9.0",
     "serve-favicon": "^2.5.1",
     "underscore": "^1.13.7"
   },
   "devDependencies": {
+    "@babel/core": "^7.28.5",
+    "@babel/preset-env": "^7.28.5",
+    "@babel/preset-react": "^7.28.5",
+    "babel-loader": "^10.0.0",
     "eslint": "^8.57.1",
     "eslint-config-airbnb": "^19.0.4",
     "eslint-plugin-import": "^2.32.0",
