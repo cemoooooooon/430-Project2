@@ -3,8 +3,7 @@ import { createRoot } from 'react-dom/client';
 
 const JournalApp = () => {
   const [entries, setEntries] = useState([]);
-  const [dates, setDates] = useState([]);
-  const [selectedDate, setSelectedDate] = useState(null);
+  const [selectedDate, setSelectedDate] = useState(todayKey());
   const [text, setText] = useState('');
 
   // load existing entries on first render
@@ -15,19 +14,8 @@ const JournalApp = () => {
         const loadedEntries = data.entries || [];
         setEntries(loadedEntries);
 
-        // build sorted list of distinct date keys
-        const uniqueDates = Array.from(
-          new Set(loadedEntries.map((e) => toDateKey(e.timestamp))),
-        ).sort(); // ascending order!
-
-        setDates(uniqueDates);
-
-        // default selectedDate: most recent date with entries, or today if none
-        if (uniqueDates.length > 0) {
-          setSelectedDate(uniqueDates[uniqueDates.length - 1]);
-        } else {
-          setSelectedDate(todayKey());
-        }
+        // default view = today
+        setSelectedDate(todayKey());
       })
       .catch((err) => {
         console.error('Error loading entries', err);
@@ -35,7 +23,7 @@ const JournalApp = () => {
   }, []);
 
   // send a new message
-   const handleSubmit = async (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     const trimmed = text.trim();
     if (!trimmed) return;
@@ -59,16 +47,10 @@ const JournalApp = () => {
 
         setEntries((prev) => [...prev, newEntry]);
 
+        // jump view to the day the new entry belongs to
         const entryDateKey = toDateKey(newEntry.timestamp);
-
-        setDates((prevDates) => {
-          const set = new Set(prevDates);
-          set.add(entryDateKey);
-          return Array.from(set).sort();
-        });
-
-        // move view to the date of the new entry
         setSelectedDate(entryDateKey);
+
         setText('');
       }
     } catch (err) {
@@ -76,56 +58,45 @@ const JournalApp = () => {
     }
   };
 
-  // navigation helpers
+  // navigation helpers: move +1 or -1 day
   const goToPrevDay = () => {
-    if (!selectedDate || dates.length === 0) return;
-    const idx = dates.indexOf(selectedDate);
-    if (idx > 0) {
-      setSelectedDate(dates[idx - 1]);
-    }
+    setSelectedDate((prev) => addDaysToKey(prev, -1));
   };
 
   const goToNextDay = () => {
-    if (!selectedDate || dates.length === 0) return;
-    const idx = dates.indexOf(selectedDate);
-    if (idx >= 0 && idx < dates.length - 1) {
-      setSelectedDate(dates[idx + 1]);
-    }
+    setSelectedDate((prev) => {
+      const next = addDaysToKey(prev, 1);
+      const today = todayKey();
+      // block moving into the future
+      return next > today ? prev : next;
+    });
   };
 
-  const hasPrev = selectedDate && dates.indexOf(selectedDate) > 0;
-  const hasNext =
-    selectedDate &&
-    dates.length > 0 &&
-    dates.indexOf(selectedDate) < dates.length - 1;
+  const selectedLabel = selectedDate
+    ? formatDateLabel(selectedDate)
+    : 'No date selected';
 
   // entries visible for the current selected day
   const visibleEntries = entries.filter(
     (e) => toDateKey(e.timestamp) === selectedDate,
   );
 
-  const selectedLabel = selectedDate
-    ? formatDateLabel(selectedDate)
-    : 'No date selected';
-
   return (
     <div className="journal-page">
       <header className="journal-header">
         <h1>ThoughtLog</h1>
-        {/* placeholder for future calendar function */}
         <button className="calendar-button" type="button">
           📅
         </button>
       </header>
 
       <main className="journal-main">
-        {/* day nav bar */}
+        {/* Day navigation bar */}
         <div className="day-nav">
           <button
             type="button"
             className="day-nav-btn"
             onClick={goToPrevDay}
-            disabled={!hasPrev}
           >
             ← Previous
           </button>
@@ -136,7 +107,6 @@ const JournalApp = () => {
             type="button"
             className="day-nav-btn"
             onClick={goToNextDay}
-            disabled={!hasNext}
           >
             Next →
           </button>
@@ -145,9 +115,7 @@ const JournalApp = () => {
         <div className="journal-messages">
           {visibleEntries.length === 0 ? (
             <p className="empty-state">
-              {dates.length === 0
-                ? 'Start typing to record your day ✨'
-                : 'No entries for this day yet.'}
+              No entries for this day yet. Start typing to record your thoughts ✨
             </p>
           ) : (
             visibleEntries.map((e) => (
@@ -162,7 +130,7 @@ const JournalApp = () => {
         <form className="journal-input" onSubmit={handleSubmit}>
           <input
             type="text"
-            placeholder="Type your thoughts..."
+            placeholder="What's on your mind?"
             value={text}
             onChange={(e) => setText(e.target.value)}
           />
@@ -184,6 +152,13 @@ const toDateKey = (ts) => {
 };
 
 const todayKey = () => toDateKey(Date.now());
+
+const addDaysToKey = (dateKey, delta) => {
+  const [y, m, d] = dateKey.split('-').map((n) => parseInt(n, 10));
+  const date = new Date(y, m - 1, d);
+  date.setDate(date.getDate() + delta);
+  return toDateKey(date);
+};
 
 const formatDateLabel = (dateKey) => {
   const [y, m, d] = dateKey.split('-').map((n) => parseInt(n, 10));
