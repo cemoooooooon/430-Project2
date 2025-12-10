@@ -1,2 +1,2 @@
-module.exports.Account = require("./Account.js");
-module.exports.JournalEntry = require("./JournalEntry.js");
+module.exports.Account = require('./Account.js');
+module.exports.JournalEntry = require('./JournalEntry.js');

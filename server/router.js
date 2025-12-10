@@ -1,62 +1,62 @@
-const controllers = require("./controllers");
-const mid = require("./middleware");
+const controllers = require('./controllers');
+const mid = require('./middleware');
 
 const router = (app) => {
   app.get(
-    "/login",
+    '/login',
     mid.requiresSecure,
     mid.requiresLogout,
-    controllers.Account.loginPage
+    controllers.Account.loginPage,
   );
 
   app.post(
-    "/login",
+    '/login',
     mid.requiresSecure,
     mid.requiresLogout,
-    controllers.Account.login
+    controllers.Account.login,
   );
 
   app.get(
-    "/signup",
+    '/signup',
     mid.requiresSecure,
     mid.requiresLogout,
-    controllers.Account.signupPage
+    controllers.Account.signupPage,
   );
 
   app.post(
-    "/signup",
+    '/signup',
     mid.requiresSecure,
     mid.requiresLogout,
-    controllers.Account.signup
+    controllers.Account.signup,
   );
 
   // log out!
-  app.get("/logout", mid.requiresLogin, controllers.Account.logout);
+  app.get('/logout', mid.requiresLogin, controllers.Account.logout);
 
   // journal routes!
-  app.get("/journal", mid.requiresLogin, controllers.Journal.journalPage);
+  app.get('/journal', mid.requiresLogin, controllers.Journal.journalPage);
   app.get(
-    "/journal/entries",
+    '/journal/entries',
     mid.requiresLogin,
-    controllers.Journal.getEntries
+    controllers.Journal.getEntries,
   );
   app.post(
-    "/journal/entry",
+    '/journal/entry',
     mid.requiresLogin,
-    controllers.Journal.createEntry
+    controllers.Journal.createEntry,
   );
 
   app.post(
-    "/changePassword",
+    '/changePassword',
     mid.requiresLogin,
-    controllers.Account.changePassword
+    controllers.Account.changePassword,
   );
 
-  app.get("/journal/stats", mid.requiresLogin, controllers.Journal.getStats);
+  app.get('/journal/stats', mid.requiresLogin, controllers.Journal.getStats);
 
-  app.get("/", mid.requiresSecure, (req, res) => {
+  app.get('/', mid.requiresSecure, (req, res) => {
     if (req.session.account) {
-      return res.redirect("/journal");
+      return res.redirect('/journal');
     }
     return controllers.Account.loginPage(req, res);
   });

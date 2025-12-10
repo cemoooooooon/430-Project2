@@ -1,5 +1,5 @@
-const mongoose = require("mongoose");
-const _ = require("underscore");
+const mongoose = require('mongoose');
+const _ = require('underscore');
 
 const setText = (text) => _.escape(text).trim();
 
@@ -23,7 +23,7 @@ const JournalEntrySchema = new mongoose.Schema({
   owner: {
     type: mongoose.Schema.ObjectId,
     required: true,
-    ref: "Account",
+    ref: 'Account',
   },
 });
 
@@ -34,5 +34,5 @@ JournalEntrySchema.statics.toAPI = (doc) => ({
   createdAt: doc.createdAt,
 });
 
-const JournalEntryModel = mongoose.model("JournalEntry", JournalEntrySchema);
+const JournalEntryModel = mongoose.model('JournalEntry', JournalEntrySchema);
 module.exports = JournalEntryModel;
