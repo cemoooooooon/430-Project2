@@ -10,7 +10,13 @@ const JournalEntrySchema = new mongoose.Schema({
     trim: true,
     set: setText,
   },
-  timestamp: {
+  // day this message belongs to
+  journalDate: {
+    type: Date,
+    required: true,
+  },
+  // message creation date
+  createdAt: {
     type: Date,
     default: Date.now,
   },
@@ -24,7 +30,8 @@ const JournalEntrySchema = new mongoose.Schema({
 JournalEntrySchema.statics.toAPI = (doc) => ({
   _id: doc._id,
   text: doc.text,
-  timestamp: doc.timestamp,
+  journalDate: doc.journalDate,
+  createdAt: doc.createdAt,
 });
 
 const JournalEntryModel = mongoose.model("JournalEntry", JournalEntrySchema);

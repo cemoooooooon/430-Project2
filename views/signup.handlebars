@@ -3,27 +3,43 @@
 <head>
   <meta charset="utf-8"/>
   <title>ThoughtLog – Sign up</title>
-  <link rel="stylesheet" type="text/css" href="/assets/style.css"/>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+  href="https://fonts.googleapis.com/css2?family=Permanent+Marker&family=M+PLUS+Rounded+1c:wght@300;400;500;700&display=swap"
+  rel="stylesheet">
+
+  <link rel="stylesheet" href="/assets/style.css"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 </head>
-<body>
-  <nav>
-    <div class="nav-title">ThoughtLog</div>
-    <div class="navlink"><a href="/login">Login</a></div>
-    <div class="navlink"><a href="/signup">Sign up</a></div>
-  </nav>
+<body class="auth-body">
+  <div class="auth-root">
+    <div class="auth-logo">
+      <img src="/assets/img/logo.GIF" alt="ThoughtLog logo">
+    </div>
 
-  <section id="signup">
-    <form id="signupForm" name="signupForm" action="/signup" method="POST" class="mainForm">
-      <label for="user">Username: </label>
-      <input id="user" type="text" name="username" placeholder="username"/>
-      <label for="pass">Password: </label>
-      <input id="pass" type="password" name="pass" placeholder="password"/>
-      <label for="pass2">Retype Password: </label>
-      <input id="pass2" type="password" name="pass2" placeholder="retype password"/>
-      <input class="formSubmit" type="submit" value="Sign Up" />
-    </form>
-  </section>
+    <div class="mainForm">
+      <form id="signupForm" name="signupForm" action="/signup" method="POST">
+        <label for="user">Username:</label>
+        <input id="user" type="text" name="username" placeholder="username"/>
 
-  <script src="/assets/bundle.js"></script>
+        <label for="pass">Password:</label>
+        <input id="pass" type="password" name="pass" placeholder="password"/>
+
+        <label for="pass2">Password (again):</label>
+        <input id="pass2" type="password" name="pass2" placeholder="password"/>
+
+        <input type="hidden" name="_csrf" value="{{csrfToken}}">
+        <button class="formSubmit" type="submit">Sign up</button>
+      </form>
+    </div>
+
+    <div class="auth-switch-row">
+      <a class="auth-switch-item" href="/login">Login</a>
+      <span class="auth-switch-item auth-switch-active">Sign up</span>
+    </div>
+
+
+  <section id="errorMessage" class="hidden"></section>
 </body>
 </html>

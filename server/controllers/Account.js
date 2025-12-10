@@ -60,10 +60,53 @@ const login = (req, res) => {
   });
 };
 
+const changePassword = async (req, res) => {
+  if (!req.session.account) {
+    return res.status(401).json({ error: "You must be logged in." });
+  }
+
+  const { currentPassword, newPassword } = req.body;
+
+  if (!currentPassword || !newPassword) {
+    return res
+      .status(400)
+      .json({ error: "Both current and new password are required." });
+  }
+
+  try {
+    // get username from the session
+    const username = req.session.account.username;
+
+    // reuse the existing authenticate helper
+    return Account.authenticate(
+      username,
+      currentPassword,
+      async (err, account) => {
+        if (err || !account) {
+          return res
+            .status(401)
+            .json({ error: "Current password is incorrect." });
+        }
+
+        // hash the new password using the same helper as signup
+        const hash = await Account.generateHash(newPassword);
+        account.password = hash;
+        await account.save();
+
+        return res.json({ message: "Password updated successfully." });
+      }
+    );
+  } catch (err) {
+    console.log(err);
+    return res.status(500).json({ error: "Error changing password." });
+  }
+};
+
 module.exports = {
   loginPage,
   signupPage,
   login,
   logout,
   signup,
+  changePassword,
 };

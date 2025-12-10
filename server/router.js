@@ -46,6 +46,14 @@ const router = (app) => {
     controllers.Journal.createEntry
   );
 
+  app.post(
+    "/changePassword",
+    mid.requiresLogin,
+    controllers.Account.changePassword
+  );
+
+  app.get("/journal/stats", mid.requiresLogin, controllers.Journal.getStats);
+
   app.get("/", mid.requiresSecure, (req, res) => {
     if (req.session.account) {
       return res.redirect("/journal");
